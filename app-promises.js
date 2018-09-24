@@ -1,6 +1,8 @@
 const request = require('request');
 const yargs = require('yargs');
 const axios = require('axios');
+require('./config/config');
+
 
 const argv = yargs 
 .options({
@@ -16,7 +18,7 @@ const argv = yargs
 .argv;
 
 var encodedAddress = encodeURIComponent(argv.address);
-var geocodeUrl = `http://www.mapquestapi.com/geocoding/v1/address?key=QYONmHYUzbLbBK7awacKMZnbjUChkY7Z&location=${encodedAddress}`
+var geocodeUrl = `http://www.mapquestapi.com/geocoding/v1/address?key=${MAPQUESTAPIKEY}&location=${encodedAddress}`
 
 axios.get(geocodeUrl).then((response) => {
     if(response.data.status === 'ZERO_RESULTS') {
@@ -24,7 +26,7 @@ axios.get(geocodeUrl).then((response) => {
     }
     var lat = response.data.results[0].locations[0].latLng.lat;
     var lng = response.data.results[0].locations[0].latLng.lng;
-    var weatherUrl = `https://api.forecast.io/forecast/06ac4b3ced893442259787f8168ba0d1/${lat},${lng}`
+    var weatherUrl = `https://api.forecast.io/forecast/${FORECASTIOAPIKEY}/${lat},${lng}`
     console.log('===============================================================================================');
     var loc = response.data.results[0].locations[0];
     console.log(`Weather results for: ${loc.street}, ${loc.adminArea5}, ${loc.adminArea3}, ${loc.adminArea1}`);
